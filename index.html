@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ocean Restaurant</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        body {
+            background-color: #ffffff;
+            color: #3b1a0a;
+        }
+
+        /* ================= NAVBAR ================= */
+        .navbar {
+            width: 100%;
+            background-color: #ffffff;
+            border-bottom: 1px solid #e5e5e5;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar-container {
+            max-width: 1400px;
+            margin: auto;
+            padding: 14px 32px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .navbar-logo img {
+            height: 150px;
+            cursor: pointer;
+        }
+
+        .navbar-links {
+            display: flex;
+            gap: 36px;
+        }
+
+        .navbar-links a {
+            text-decoration: none;
+            font-size: 0.95rem;
+            letter-spacing: 1.5px;
+            font-weight: 700;
+            color: #3b1a0a;
+            padding-bottom: 6px;
+            position: relative;
+        }
+
+        .navbar-links a.active {
+            color: #8b0000;
+        }
+
+        .navbar-links a.active::after {
+            content: "";
+            position: absolute;
+            bottom: -6px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background-color: #8b0000;
+        }
+
+        .navbar-actions {
+            display: flex;
+            gap: 24px;
+            font-weight: 600;
+        }
+
+        /* ================= MENU GRID ================= */
+        .menu-container {
+            max-width: 1200px;
+            margin: 80px auto;
+            padding: 0 32px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 80px 60px;
+        }
+
+        .menu-item {
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.35s ease;
+        }
+
+        .menu-item img {
+            width: 100%;
+            max-width: 260px;
+            height: 180px;
+            object-fit: contain;
+            margin-bottom: 24px;
+            transition: transform 0.35s ease;
+        }
+
+        .menu-item h2 {
+            font-size: 1.8rem;
+            letter-spacing: 1px;
+            font-weight: 800;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+        }
+
+        /* DESCRIPTION (hidden by default) */
+        .menu-item p {
+            font-size: 0.95rem;
+            color: #555;
+            margin-bottom: 12px;
+            max-height: 0;
+            overflow: hidden;
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        .menu-item.active-desc p {
+            max-height: 80px;
+            opacity: 1;
+            
+        }
+
+        .price-tag {
+            font-size: 1rem;
+            font-weight: 700;
+        }
+        /* ================= MENU SECTION TITLE ================= */
+        .menu-section {
+            max-width: 1200px;
+            margin: 60px auto 0;
+            padding: 0 32px;
+            text-align: center;
+        }
+
+        .menu-section h1 {
+            font-size: 2.4rem;
+            letter-spacing: 3px;
+            font-weight: 800;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+        }
+
+        .menu-section span {
+            display: inline-block;
+            width: 80px;
+            height: 4px;
+            background-color: #8b0000;
+        }
+        /* Zoom the meal when active */
+        .menu-item.active-desc img {
+            transform: scale(1.18);
+        }
+
+        /* Slight emphasis on the whole card */
+        .menu-item.active-desc {
+            transform: scale(1.05);
+        }
+        /* ================= RESPONSIVE ================= */
+        @media (max-width: 900px) {
+            .menu-container {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 60px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .menu-container {
+                grid-template-columns: 1fr;
+            }
+
+            .navbar-links {
+                display: none;
+            }
+        }
+        .add-btn {
+            margin-top: 10px;
+            padding: 8px 14px;
+            border: none;
+            background: #8b0000;
+            color: white;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .cart-btn {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            background: #8b0000;
+            color: white;
+            padding: 14px 18px;
+            border-radius: 50px;
+            font-weight: 700;
+            cursor: pointer;
+            z-index: 2000;
+        }
+
+    </style>
+</head>
+
+<body>
+
+<header class="navbar">
+    <div class="navbar-container">
+        <div class="navbar-logo">
+            <img src="https://allarassemjonathan.github.io/oceanlogo.png">
+        </div>
+
+        <nav class="navbar-links">
+            <a href="#" class="active">MENU</a>
+            <a href="#localisation">Localisation</a>
+        </nav>
+    </div>
+</header>
+
+<!-- ================= MENU ================= -->
+<div class="menu-section">
+    <h1>Nourriture</h1>
+    <span></span>
+</div>
+
+<div class="menu-container">
+<!-- ================= MENU CATEGORY ================= -->
+
+    <div class="menu-item" onclick="toggleDesc(this)">
+        <img src="https://allarassemjonathan.github.io/kasarlipiderealedited.jfif.png">
+        <h2>Kasarli Pide</h2>
+        <p>Plat turque avec mozzarella</p>
+        <div class="price-tag">3000 FCFA</div>
+        <button class="add-btn"
+        onclick="addToCart(event, 'Kasarli Pide', 3000)">
+        Add to Cart
+        </button>
+    </div>
+
+    <div class="menu-item" onclick="toggleDesc(this)">
+        <img src="https://allarassemjonathan.github.io/kasarliyumurtalirealdited.png">
+        <h2>Kasarli Yumurtali</h2>
+        <p>Plat turc avec mozzarella et crêpe</p>
+        <div class="price-tag">3500 FCFA</div>
+        <button class="add-btn"
+        onclick="addToCart(event, 'Kasarli Yumurtali', 3500)">
+        Add to Cart
+        </button>
+    </div>
+
+    <div class="menu-item" onclick="toggleDesc(this)">
+        <img src="https://allarassemjonathan.github.io/klymalipiderealedited.png">
+        <h2>Klymali Pide</h2>
+        <p>Plat turc à la viande hachée</p>
+        <div class="price-tag">3000 FCFA</div>
+        <button class="add-btn"
+        onclick="addToCart(event, 'Klymali Pide', 3000)">
+        Add to Cart
+        </button>
+    </div>
+
+    <div class="menu-item" onclick="toggleDesc(this)">
+        <img src="https://allarassemjonathan.github.io/klymaliyumurtarealedited.jfif.png">
+        <h2>Klymali Yumurta</h2>
+        <p>Plat turc à la viande hachée, parmesan et crêpe</p>
+        <div class="price-tag">3500 FCFA</div>
+        <button class="add-btn"
+        onclick="addToCart(event, 'Klymali Yumurta', 3500)">
+        Add to Cart
+        </button>
+    </div>
+
+    <div class="menu-item" onclick="toggleDesc(this)">
+        <img src="https://allarassemjonathan.github.io/hasarliyumurtarealedited.png">
+        <h2>Hasarli Yumurta</h2>
+        <p>Plat turque avec pressage korax tape et crêpe</p>
+        <div class="price-tag">3500 FCFA</div>
+        <button class="add-btn"
+        onclick="addToCart(event, 'Hasarli Yumurta', 3500)">
+        Add to Cart
+        </button>
+    </div>
+
+    <div class="menu-item" onclick="toggleDesc(this)">
+        <img src="https://allarassemjonathan.github.io/Labnehrealedited.png">
+        <h2>Labneh</h2>
+        <p>Apéritif : Chenilles au sel et au piment</p>
+        <div class="price-tag">2500 FCFA</div>
+        <button class="add-btn"
+        onclick="addToCart(event, 'Labneh', 2500)">
+        Add to Cart
+        </button>
+    </div>
+
+</div>
+<div class="menu-section">
+    <h1>Pizza</h1>
+    <span></span>
+</div>
+
+<div class="menu-container">
+    <div class="menu-item" onclick="toggleDesc(this)">
+        <img src="https://allarassemjonathan.github.io/lahmacunrealedited.png">
+        <h2>Lahmacun</h2>
+        <p> Pizza turc</p>
+        <div class="price-tag">2000 FCFA</div>
+        <button class="add-btn"
+        onclick="addToCart(event, 'Lahmacun', 2000)">
+        Add to Cart
+        </button>
+    </div>
+    <div class="menu-item" onclick="toggleDesc(this)">
+        <img src="https://allarassemjonathan.github.io/lahmacunsimplerealedited.png">
+        <h2>Lahmacun simple</h2>
+        <p> Pizza turc simple</p>
+        <div class="price-tag">2500 FCFA</div>
+        <button class="add-btn"
+        onclick="addToCart(event, 'Lahmacun simple', 2500)">
+        Add to Cart
+        </button>
+    </div>
+    <div class="menu-item" onclick="toggleDesc(this)">
+        <img src="https://allarassemjonathan.github.io/lahmacunpouletrealedited.png">
+        <h2>Lahmacun poulet</h2>
+        <p> Pizza turc avec du poulet</p>
+        <div class="price-tag">3500 FCFA</div>
+        <button class="add-btn"
+        onclick="addToCart(event, 'Lahmacun poulet', 3500)">
+        Add to Cart
+        </button>
+    </div>
+    <div class="menu-item" onclick="toggleDesc(this)">
+        <img src="https://allarassemjonathan.github.io/lahmacunvianderealedited.png">
+        <h2>Lahmacun viande</h2>
+        <p> Pizza turc avec de la viande</p>
+        <div class="price-tag">3500 FCFA</div>
+        <button class="add-btn"
+        onclick="addToCart(event, 'Lahmacun viande', 3500)">
+        Add to Cart
+        </button>
+    </div>
+    <div class="menu-item" onclick="toggleDesc(this)">
+        <img src="https://allarassemjonathan.github.io/lahmacunpouletvianderealedited.png">
+        <h2>Lahmacun mix</h2>
+        <p> Pizza turc avec viande et poulet</p>
+        <div class="price-tag">4000 FCFA</div>
+        <button class="add-btn"
+        onclick="addToCart(event, 'Lahmacun mix', 4000)">
+        Add to Cart
+        </button>
+    </div>
+   
+</div>
+
+<div class="menu-section">
+    <h1>Plats principaux</h1>
+    <span></span>
+</div>
+<div class="menu-container">
+    <div class="menu-item" onclick="toggleDesc(this)">
+        <img src="https://allarassemjonathan.github.io/adanakebabrealedited.png">
+        <h2>Adana kebab</h2>
+        <p>Brochette d'agneau haché épicée avec de la viande hachée</p>
+        <div class="price-tag">4000 FCFA</div>
+        <button class="add-btn"
+        onclick="addToCart(event, 'Adana kebab', 4000)">
+        Add to Cart
+        </button>
+    </div>
+    <div class="menu-item" onclick="toggleDesc(this)">
+        <img src="https://allarassemjonathan.github.io/kagitkebabrealedited.png">
+        <h2>Kagit kebab</h2>
+        <p>Émincé d'agneau cuit au papier</p>
+        <div class="price-tag">4000 FCFA</div>
+        <button class="add-btn"
+        onclick="addToCart(event, 'Adana kebab', 4000)">
+        Add to Cart
+        </button>
+    </div>
+    <div class="menu-item" onclick="toggleDesc(this)">
+        <img src="https://allarassemjonathan.github.io/tepsikebabrealedited.png">
+        <h2>Tepsi kebab</h2>
+        <p>Galette d'agneau et légumes rôtis au four dans un plateau traditionnel.</p>
+        <div class="price-tag">4000 FCFA</div>
+        <button class="add-btn"
+        onclick="addToCart(event, 'Adana kebab', 4000)">
+        Add to Cart
+        </button>
+    </div>
+    <div class="menu-item" onclick="toggleDesc(this)">
+        <img src="https://allarassemjonathan.github.io/kusbasisisrealedited.png">
+        <h2>Kusbasi sis</h2>
+        <p>Brochette de cubes d'agneau marinés et grillé</p>
+        <div class="price-tag">4000 FCFA</div>
+        <button class="add-btn"
+        onclick="addToCart(event, 'Adana kebab', 4000)">
+        Add to Cart
+        </button>
+    </div>
+    <div class="menu-item" onclick="toggleDesc(this)">
+        <img src="https://allarassemjonathan.github.io/tavuksisrealedited.png">
+        <h2>Tavuk sis</h2>
+        <p>Brochette de cubes de poulets marinés et grillé</p>
+        <div class="price-tag">4000 FCFA</div>
+        <button class="add-btn"
+        onclick="addToCart(event, 'Adana kebab', 4000)">
+        Add to Cart
+        </button>
+    </div>
+    <div class="menu-item" onclick="toggleDesc(this)">
+        <img src="https://allarassemjonathan.github.io/kanatrealedited.png">
+        <h2>Kanat</h2>
+        <p>Ailerons de poulet grillés avec des épices turques</p>
+        <div class="price-tag">4000 FCFA</div>
+        <button class="add-btn"
+        onclick="addToCart(event, 'Adana kebab', 4000)">
+        Add to Cart
+        </button>
+    </div>
+    <div class="menu-item" onclick="toggleDesc(this)">
+        <img src="https://allarassemjonathan.github.io/Karisikkebabrealedited.png">
+        <h2>Karisik kebab</h2>
+        <p>Un assortiment généreux d'agneau, de poulet et de kebabs variés</p>
+        <div class="price-tag">4000 FCFA</div>
+        <button class="add-btn"
+        onclick="addToCart(event, 'Adana kebab', 4000)">
+        Add to Cart
+        </button>
+    </div>
+    <div class="menu-item" onclick="toggleDesc(this)">
+        <img src="https://allarassemjonathan.github.io/babagannusmezerealedited.png">
+        <h2>Babagannus meze</h2>
+        <p>Purée d'aubergines grillées au tahini et à l'ail</p>
+        <div class="price-tag">4000 FCFA</div>
+        <button class="add-btn"
+        onclick="addToCart(event, 'Adana kebab', 4000)">
+        Add to Cart
+        </button>
+    </div>
+    <div class="menu-item" onclick="toggleDesc(this)">
+        <img src="https://allarassemjonathan.github.io/humousmezerealedited.png">
+        <h2>Houmous meze</h2>
+        <p>Purée de pois chiches au tahini, parfumée à l’ail et au citron</p>
+        <div class="price-tag">4000 FCFA</div>
+        <button class="add-btn"
+        onclick="addToCart(event, 'Adana kebab', 4000)">
+        Add to Cart
+        </button>
+    </div>
+</div>
+<div class="menu-section">
+    <h1>Salade</h1>
+    <span></span>
+</div>
+<div class="menu-container">
+    <div class="menu-item" onclick="toggleDesc(this)">
+        <img src="https://allarassemjonathan.github.io/saladrealdited.png">
+        <h2>Salade simple</h2>
+        <p>Assortiment de légumes</p>
+        <div class="price-tag">2000 FCFA</div>
+        <button class="add-btn"
+        onclick="addToCart(event, 'salade', 2000)">
+        Add to Cart
+        </button>
+    </div>  
+</div>
+<div class="menu-section">
+    <h1>Boissons</h1>
+    <span></span>
+</div>
+
+<div class="menu-container">
+        <div class="menu-item" onclick="toggleDesc(this)">
+        <img src="https://allarassemjonathan.github.io/ayranrealedited.png">
+        <h2>Ayran</h2>
+        <p>Boisson traditionnelle nationale de la turquie</p>
+        <div class="price-tag">1000 FCFA</div>
+        <button class="add-btn"
+        onclick="addToCart(event, 'Ayran', 1000)">
+        Add to Cart
+        </button>
+    </div> 
+    <div class="menu-item" onclick="toggleDesc(this)">
+        <img src="https://allarassemjonathan.github.io/beypazarirealedited.png">
+        <h2>Beypazary</h2>
+        <p>Eau gazeuse turque naturelle</p>
+        <div class="price-tag">1000 FCFA</div>
+        <button class="add-btn"
+        onclick="addToCart(event, 'Beypazary', 1000)">
+        Add to Cart
+        </button>
+    </div> 
+    <div class="menu-item" onclick="toggleDesc(this)">
+        <img src="https://allarassemjonathan.github.io/redbullrealedited.png">
+        <h2>Red bull</h2>
+        <p>Boisson énergisante gazeuse à la taurine.</p>
+        <div class="price-tag">1000 FCFA</div>
+        <button class="add-btn"
+        onclick="addToCart(event, 'Red bull', 1000)">
+        Add to Cart
+        </button>
+    </div> 
+    <div class="menu-item" onclick="toggleDesc(this)">
+        <img src="https://allarassemjonathan.github.io/cocacolarealedited.png">
+        <h2>Coca cola</h2>
+        <p>Soda classique pétillant</p>
+        <div class="price-tag">750 FCFA</div>
+        <button class="add-btn"
+        onclick="addToCart(event, 'Coca cola', 750)">
+        Add to Cart
+        </button>
+    </div> 
+    <div class="menu-item" onclick="toggleDesc(this)">
+        <img src="https://allarassemjonathan.github.io/cocacolazerorealedited.png">
+        <h2>Coca cola zero</h2>
+        <p>Soda classique pétillant</p>
+        <div class="price-tag">750 FCFA</div>
+        <button class="add-btn"
+        onclick="addToCart(event, 'Coca cola Zero', 750)">
+        Add to Cart
+        </button>
+    </div> 
+    <div class="menu-item" onclick="toggleDesc(this)">
+        <img src="https://allarassemjonathan.github.io/fantarealedited.png">
+        <h2>Fanta</h2>
+        <p>Soda classique pétillant</p>
+        <div class="price-tag">750 FCFA</div>
+        <button class="add-btn"
+        onclick="addToCart(event, 'Fanta', 750)">
+        Add to Cart
+        </button>
+    </div> 
+    <div class="menu-item" onclick="toggleDesc(this)">
+        <img src="https://allarassemjonathan.github.io/spriterealedited.png">
+        <h2>Sprite</h2>
+        <p>Soda classique pétillant</p>
+        <div class="price-tag">750 FCFA</div>
+        <button class="add-btn"
+        onclick="addToCart(event, 'Sprite', 750)">
+        Add to Cart
+        </button>
+    </div> 
+</div>
+<script>
+    // Reveal animation on scroll
+    const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = 1;
+                entry.target.style.transform = "translateY(0)";
+            }
+        });
+    }, { threshold: 0.2 });
+
+    document.querySelectorAll('.menu-item').forEach(item => {
+        item.style.opacity = 0;
+        item.style.transform = "translateY(20px)";
+        item.style.transition = "all 0.6s ease";
+        observer.observe(item);
+    });
+
+    // Toggle description (only one open at a time)
+  
+        function toggleDesc(element) {
+            const isActive = element.classList.contains('active-desc');
+
+            document.querySelectorAll('.menu-item').forEach(item => {
+                item.classList.remove('active-desc');
+            });
+
+            if (!isActive) {
+                element.classList.add('active-desc');
+                element.scrollIntoView({ behavior: "smooth", block: "center" });
+            }
+        }
+        let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+        function addToCart(e, name, price) {
+            e.stopPropagation();
+
+            cart.push({ name, price });
+            localStorage.setItem("cart", JSON.stringify(cart));
+            updateCartCount();
+        }
+
+        function updateCartCount() {
+            document.getElementById("cart-count").innerText = cart.length;
+        }
+
+        function openCheckout() {
+            const modal = document.getElementById("checkout-modal");
+            const summary = document.getElementById("order-summary");
+
+            let total = 0;
+            summary.innerHTML = "";
+
+            cart.forEach(item => {
+                total += item.price;
+                summary.innerHTML += `<p>${item.name} - ${item.price} FCFA</p>`;
+            });
+
+            summary.innerHTML += `<hr><strong>Total: ${total} FCFA</strong>`;
+
+            document.getElementById("order-data").value =
+                cart.map(i => `${i.name} (${i.price} FCFA)`).join(", ") +
+                ` | Total: ${total} FCFA`;
+
+            modal.style.display = "block";
+        }
+
+        function closeCheckout() {
+            document.getElementById("checkout-modal").style.display = "none";
+        }
+
+        updateCartCount();
+</script>
+<div class="cart-btn" onclick="openCheckout()">
+    Cart (<span id="cart-count">0</span>)
+</div>
+<div id="checkout-modal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); z-index:3000;">
+    <div style="background:white; max-width:500px; margin:80px auto; padding:30px;">
+        <h2>Checkout</h2>
+
+        <form action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+            <input type="hidden" name="order" id="order-data">
+
+            <label>Name</label>
+            <input type="text" name="name" required style="width:100%;margin-bottom:10px">
+
+            <label>Email</label>
+            <input type="email" name="email" required style="width:100%;margin-bottom:10px">
+
+            <h3>Order Summary</h3>
+            <div id="order-summary"></div>
+
+            <button type="submit" style="margin-top:15px;padding:10px 16px;background:#8b0000;color:white;border:none;">
+                Send Order
+            </button>
+
+            <button type="button" onclick="closeCheckout()" style="margin-left:10px">
+                Cancel
+            </button>
+        </form>
+    </div>
+</div>
+
+</body>
+</html>
