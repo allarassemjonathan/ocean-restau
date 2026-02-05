@@ -16,6 +16,7 @@
         body {
             background-color: #ffffff;
             color: #3b1a0a;
+            overflow-x: hidden;
         }
 
         /* ================= NAVBAR ================= */
@@ -38,7 +39,7 @@
         }
 
         .navbar-logo img {
-            height: 150px;
+            height: 100px;
             cursor: pointer;
         }
 
@@ -71,16 +72,10 @@
             background-color: #8b0000;
         }
 
-        .navbar-actions {
-            display: flex;
-            gap: 24px;
-            font-weight: 600;
-        }
-
         /* ================= MENU GRID ================= */
         .menu-container {
             max-width: 1200px;
-            margin: 80px auto;
+            margin: 40px auto 80px;
             padding: 0 32px;
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -103,14 +98,13 @@
         }
 
         .menu-item h2 {
-            font-size: 1.8rem;
+            font-size: 1.5rem;
             letter-spacing: 1px;
             font-weight: 800;
             margin-bottom: 8px;
             text-transform: uppercase;
         }
 
-        /* DESCRIPTION (hidden by default) */
         .menu-item p {
             font-size: 0.95rem;
             color: #555;
@@ -122,15 +116,17 @@
         }
 
         .menu-item.active-desc p {
-            max-height: 80px;
+            max-height: 100px;
             opacity: 1;
-            
         }
 
         .price-tag {
-            font-size: 1rem;
+            font-size: 1.1rem;
             font-weight: 700;
+            color: #8b0000;
+            margin-bottom: 10px;
         }
+
         /* ================= MENU SECTION TITLE ================= */
         .menu-section {
             max-width: 1200px;
@@ -153,40 +149,26 @@
             height: 4px;
             background-color: #8b0000;
         }
-        /* Zoom the meal when active */
+
         .menu-item.active-desc img {
-            transform: scale(1.18);
+            transform: scale(1.1);
         }
 
-        /* Slight emphasis on the whole card */
-        .menu-item.active-desc {
-            transform: scale(1.05);
-        }
-        /* ================= RESPONSIVE ================= */
-        @media (max-width: 900px) {
-            .menu-container {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 60px;
-            }
-        }
-
-        @media (max-width: 600px) {
-            .menu-container {
-                grid-template-columns: 1fr;
-            }
-
-            .navbar-links {
-                display: none;
-            }
-        }
+        /* ================= BUTTONS & UI ================= */
         .add-btn {
             margin-top: 10px;
-            padding: 8px 14px;
+            padding: 10px 20px;
             border: none;
             background: #8b0000;
             color: white;
             cursor: pointer;
             font-weight: 600;
+            border-radius: 4px;
+            transition: background 0.2s;
+        }
+
+        .add-btn:hover {
+            background: #a50000;
         }
 
         .cart-btn {
@@ -195,13 +177,60 @@
             right: 25px;
             background: #8b0000;
             color: white;
-            padding: 14px 18px;
+            padding: 14px 24px;
             border-radius: 50px;
             font-weight: 700;
             cursor: pointer;
             z-index: 2000;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
         }
 
+        @keyframes cart-pop {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        .cart-pop-animation {
+            animation: cart-pop 0.3s ease-out;
+        }
+
+        .toast-notification {
+            position: fixed;
+            bottom: 90px;
+            right: 25px;
+            background: #333;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s ease;
+            z-index: 2500;
+        }
+
+        .toast-show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ================= MODAL ================= */
+        #checkout-modal input {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        /* ================= RESPONSIVE ================= */
+        @media (max-width: 900px) {
+            .menu-container { grid-template-columns: repeat(2, 1fr); gap: 40px; }
+        }
+
+        @media (max-width: 600px) {
+            .menu-container { grid-template-columns: 1fr; }
+            .navbar-links { display: none; }
+        }
     </style>
 </head>
 
@@ -210,34 +239,27 @@
 <header class="navbar">
     <div class="navbar-container">
         <div class="navbar-logo">
-            <img src="https://allarassemjonathan.github.io/oceanlogo.png">
+            <img src="https://allarassemjonathan.github.io/oceanlogo.png" alt="Ocean Logo">
         </div>
-
         <nav class="navbar-links">
             <a href="#" class="active">MENU</a>
-            <a href="#localisation">Localisation</a>
+            <a href="#localisation">LOCALISATION</a>
         </nav>
     </div>
 </header>
 
-<!-- ================= MENU ================= -->
 <div class="menu-section">
     <h1>Nourriture</h1>
     <span></span>
 </div>
 
 <div class="menu-container">
-<!-- ================= MENU CATEGORY ================= -->
-
     <div class="menu-item" onclick="toggleDesc(this)">
         <img src="https://allarassemjonathan.github.io/kasarlipiderealedited.jfif.png">
         <h2>Kasarli Pide</h2>
         <p>Plat turque avec mozzarella</p>
         <div class="price-tag">3000 FCFA</div>
-        <button class="add-btn"
-        onclick="addToCart(event, 'Kasarli Pide', 3000)">
-        Add to Cart
-        </button>
+        <button class="add-btn" onclick="addToCart(event, 'Kasarli Pide', 3000)">Add to Cart</button>
     </div>
 
     <div class="menu-item" onclick="toggleDesc(this)">
@@ -245,10 +267,7 @@
         <h2>Kasarli Yumurtali</h2>
         <p>Plat turc avec mozzarella et crêpe</p>
         <div class="price-tag">3500 FCFA</div>
-        <button class="add-btn"
-        onclick="addToCart(event, 'Kasarli Yumurtali', 3500)">
-        Add to Cart
-        </button>
+        <button class="add-btn" onclick="addToCart(event, 'Kasarli Yumurtali', 3500)">Add to Cart</button>
     </div>
 
     <div class="menu-item" onclick="toggleDesc(this)">
@@ -256,10 +275,7 @@
         <h2>Klymali Pide</h2>
         <p>Plat turc à la viande hachée</p>
         <div class="price-tag">3000 FCFA</div>
-        <button class="add-btn"
-        onclick="addToCart(event, 'Klymali Pide', 3000)">
-        Add to Cart
-        </button>
+        <button class="add-btn" onclick="addToCart(event, 'Klymali Pide', 3000)">Add to Cart</button>
     </div>
 
     <div class="menu-item" onclick="toggleDesc(this)">
@@ -267,10 +283,7 @@
         <h2>Klymali Yumurta</h2>
         <p>Plat turc à la viande hachée, parmesan et crêpe</p>
         <div class="price-tag">3500 FCFA</div>
-        <button class="add-btn"
-        onclick="addToCart(event, 'Klymali Yumurta', 3500)">
-        Add to Cart
-        </button>
+        <button class="add-btn" onclick="addToCart(event, 'Klymali Yumurta', 3500)">Add to Cart</button>
     </div>
 
     <div class="menu-item" onclick="toggleDesc(this)">
@@ -278,10 +291,7 @@
         <h2>Hasarli Yumurta</h2>
         <p>Plat turque avec pressage korax tape et crêpe</p>
         <div class="price-tag">3500 FCFA</div>
-        <button class="add-btn"
-        onclick="addToCart(event, 'Hasarli Yumurta', 3500)">
-        Add to Cart
-        </button>
+        <button class="add-btn" onclick="addToCart(event, 'Hasarli Yumurta', 3500)">Add to Cart</button>
     </div>
 
     <div class="menu-item" onclick="toggleDesc(this)">
@@ -289,13 +299,10 @@
         <h2>Labneh</h2>
         <p>Apéritif : Chenilles au sel et au piment</p>
         <div class="price-tag">2500 FCFA</div>
-        <button class="add-btn"
-        onclick="addToCart(event, 'Labneh', 2500)">
-        Add to Cart
-        </button>
+        <button class="add-btn" onclick="addToCart(event, 'Labneh', 2500)">Add to Cart</button>
     </div>
-
 </div>
+
 <div class="menu-section">
     <h1>Pizza</h1>
     <span></span>
@@ -305,54 +312,38 @@
     <div class="menu-item" onclick="toggleDesc(this)">
         <img src="https://allarassemjonathan.github.io/lahmacunrealedited.png">
         <h2>Lahmacun</h2>
-        <p> Pizza turc</p>
+        <p>Pizza turc</p>
         <div class="price-tag">2000 FCFA</div>
-        <button class="add-btn"
-        onclick="addToCart(event, 'Lahmacun', 2000)">
-        Add to Cart
-        </button>
+        <button class="add-btn" onclick="addToCart(event, 'Lahmacun', 2000)">Add to Cart</button>
     </div>
     <div class="menu-item" onclick="toggleDesc(this)">
         <img src="https://allarassemjonathan.github.io/lahmacunsimplerealedited.png">
         <h2>Lahmacun simple</h2>
-        <p> Pizza turc simple</p>
+        <p>Pizza turc simple</p>
         <div class="price-tag">2500 FCFA</div>
-        <button class="add-btn"
-        onclick="addToCart(event, 'Lahmacun simple', 2500)">
-        Add to Cart
-        </button>
+        <button class="add-btn" onclick="addToCart(event, 'Lahmacun simple', 2500)">Add to Cart</button>
     </div>
     <div class="menu-item" onclick="toggleDesc(this)">
         <img src="https://allarassemjonathan.github.io/lahmacunpouletrealedited.png">
         <h2>Lahmacun poulet</h2>
-        <p> Pizza turc avec du poulet</p>
+        <p>Pizza turc avec du poulet</p>
         <div class="price-tag">3500 FCFA</div>
-        <button class="add-btn"
-        onclick="addToCart(event, 'Lahmacun poulet', 3500)">
-        Add to Cart
-        </button>
+        <button class="add-btn" onclick="addToCart(event, 'Lahmacun poulet', 3500)">Add to Cart</button>
     </div>
     <div class="menu-item" onclick="toggleDesc(this)">
         <img src="https://allarassemjonathan.github.io/lahmacunvianderealedited.png">
         <h2>Lahmacun viande</h2>
-        <p> Pizza turc avec de la viande</p>
+        <p>Pizza turc avec de la viande</p>
         <div class="price-tag">3500 FCFA</div>
-        <button class="add-btn"
-        onclick="addToCart(event, 'Lahmacun viande', 3500)">
-        Add to Cart
-        </button>
+        <button class="add-btn" onclick="addToCart(event, 'Lahmacun viande', 3500)">Add to Cart</button>
     </div>
     <div class="menu-item" onclick="toggleDesc(this)">
         <img src="https://allarassemjonathan.github.io/lahmacunpouletvianderealedited.png">
         <h2>Lahmacun mix</h2>
-        <p> Pizza turc avec viande et poulet</p>
+        <p>Pizza turc avec viande et poulet</p>
         <div class="price-tag">4000 FCFA</div>
-        <button class="add-btn"
-        onclick="addToCart(event, 'Lahmacun mix', 4000)">
-        Add to Cart
-        </button>
+        <button class="add-btn" onclick="addToCart(event, 'Lahmacun mix', 4000)">Add to Cart</button>
     </div>
-   
 </div>
 
 <div class="menu-section">
@@ -365,92 +356,66 @@
         <h2>Adana kebab</h2>
         <p>Brochette d'agneau haché épicée avec de la viande hachée</p>
         <div class="price-tag">4000 FCFA</div>
-        <button class="add-btn"
-        onclick="addToCart(event, 'Adana kebab', 4000)">
-        Add to Cart
-        </button>
+        <button class="add-btn" onclick="addToCart(event, 'Adana kebab', 4000)">Add to Cart</button>
     </div>
     <div class="menu-item" onclick="toggleDesc(this)">
         <img src="https://allarassemjonathan.github.io/kagitkebabrealedited.png">
         <h2>Kagit kebab</h2>
         <p>Émincé d'agneau cuit au papier</p>
         <div class="price-tag">4000 FCFA</div>
-        <button class="add-btn"
-        onclick="addToCart(event, 'Adana kebab', 4000)">
-        Add to Cart
-        </button>
+        <button class="add-btn" onclick="addToCart(event, 'Kagit kebab', 4000)">Add to Cart</button>
     </div>
     <div class="menu-item" onclick="toggleDesc(this)">
         <img src="https://allarassemjonathan.github.io/tepsikebabrealedited.png">
         <h2>Tepsi kebab</h2>
         <p>Galette d'agneau et légumes rôtis au four dans un plateau traditionnel.</p>
         <div class="price-tag">4000 FCFA</div>
-        <button class="add-btn"
-        onclick="addToCart(event, 'Adana kebab', 4000)">
-        Add to Cart
-        </button>
+        <button class="add-btn" onclick="addToCart(event, 'Tepsi kebab', 4000)">Add to Cart</button>
     </div>
     <div class="menu-item" onclick="toggleDesc(this)">
         <img src="https://allarassemjonathan.github.io/kusbasisisrealedited.png">
         <h2>Kusbasi sis</h2>
         <p>Brochette de cubes d'agneau marinés et grillé</p>
         <div class="price-tag">4000 FCFA</div>
-        <button class="add-btn"
-        onclick="addToCart(event, 'Adana kebab', 4000)">
-        Add to Cart
-        </button>
+        <button class="add-btn" onclick="addToCart(event, 'Kusbasi sis', 4000)">Add to Cart</button>
     </div>
     <div class="menu-item" onclick="toggleDesc(this)">
         <img src="https://allarassemjonathan.github.io/tavuksisrealedited.png">
         <h2>Tavuk sis</h2>
         <p>Brochette de cubes de poulets marinés et grillé</p>
         <div class="price-tag">4000 FCFA</div>
-        <button class="add-btn"
-        onclick="addToCart(event, 'Adana kebab', 4000)">
-        Add to Cart
-        </button>
+        <button class="add-btn" onclick="addToCart(event, 'Tavuk sis', 4000)">Add to Cart</button>
     </div>
     <div class="menu-item" onclick="toggleDesc(this)">
         <img src="https://allarassemjonathan.github.io/kanatrealedited.png">
         <h2>Kanat</h2>
         <p>Ailerons de poulet grillés avec des épices turques</p>
         <div class="price-tag">4000 FCFA</div>
-        <button class="add-btn"
-        onclick="addToCart(event, 'Adana kebab', 4000)">
-        Add to Cart
-        </button>
+        <button class="add-btn" onclick="addToCart(event, 'Kanat', 4000)">Add to Cart</button>
     </div>
     <div class="menu-item" onclick="toggleDesc(this)">
         <img src="https://allarassemjonathan.github.io/Karisikkebabrealedited.png">
         <h2>Karisik kebab</h2>
         <p>Un assortiment généreux d'agneau, de poulet et de kebabs variés</p>
         <div class="price-tag">4000 FCFA</div>
-        <button class="add-btn"
-        onclick="addToCart(event, 'Adana kebab', 4000)">
-        Add to Cart
-        </button>
+        <button class="add-btn" onclick="addToCart(event, 'Karisik kebab', 4000)">Add to Cart</button>
     </div>
     <div class="menu-item" onclick="toggleDesc(this)">
         <img src="https://allarassemjonathan.github.io/babagannusmezerealedited.png">
         <h2>Babagannus meze</h2>
         <p>Purée d'aubergines grillées au tahini et à l'ail</p>
         <div class="price-tag">4000 FCFA</div>
-        <button class="add-btn"
-        onclick="addToCart(event, 'Adana kebab', 4000)">
-        Add to Cart
-        </button>
+        <button class="add-btn" onclick="addToCart(event, 'Babagannus meze', 4000)">Add to Cart</button>
     </div>
     <div class="menu-item" onclick="toggleDesc(this)">
         <img src="https://allarassemjonathan.github.io/humousmezerealedited.png">
         <h2>Houmous meze</h2>
         <p>Purée de pois chiches au tahini, parfumée à l’ail et au citron</p>
         <div class="price-tag">4000 FCFA</div>
-        <button class="add-btn"
-        onclick="addToCart(event, 'Adana kebab', 4000)">
-        Add to Cart
-        </button>
+        <button class="add-btn" onclick="addToCart(event, 'Houmous meze', 4000)">Add to Cart</button>
     </div>
 </div>
+
 <div class="menu-section">
     <h1>Salade</h1>
     <span></span>
@@ -461,91 +426,206 @@
         <h2>Salade simple</h2>
         <p>Assortiment de légumes</p>
         <div class="price-tag">2000 FCFA</div>
-        <button class="add-btn"
-        onclick="addToCart(event, 'salade', 2000)">
-        Add to Cart
-        </button>
+        <button class="add-btn" onclick="addToCart(event, 'Salade simple', 2000)">Add to Cart</button>
     </div>  
 </div>
+
+<div class="menu-section">
+    <h1>Sandwiches</h1>
+    <span></span>
+</div>
+<div class="menu-container">
+    <div class="menu-item" onclick="toggleDesc(this)">
+        <img src="https://allarassemjonathan.github.io/durum-harbiye-real.png">
+        <h2>Sandwich Poulet</h2>
+        <p>Sandwich au poulet</p>
+        <div class="price-tag">1500 FCFA</div>
+        <button class="add-btn" onclick="addToCart(event, 'Sandwich Poulet', 1500)">Add to Cart</button>
+    </div>
+    <div class="menu-item" onclick="toggleDesc(this)">
+        <img src="https://allarassemjonathan.github.io/durum-harbiye-real.png">
+        <h2>Sandwich Viande</h2>
+        <p>Sandwich à la viande.</p>
+        <div class="price-tag">1500 FCFA</div>
+        <button class="add-btn" onclick="addToCart(event, 'Sandwich Viande', 1500)">Add to Cart</button>
+    </div>
+    <div class="menu-item" onclick="toggleDesc(this)">
+        <img src="https://allarassemjonathan.github.io/durum-karisik-real.png">
+        <h2>Durum Karisik</h2>
+        <p>Duo de viandes grillées, crudités et sauce maison.</p>
+        <div class="price-tag">5000 FCFA</div>
+        <button class="add-btn" onclick="addToCart(event, 'Durum Karisik', 5000)">Add to Cart</button>
+    </div>
+    <div class="menu-item" onclick="toggleDesc(this)">
+        <img src="https://allarassemjonathan.github.io/durum-kebab-real.png">
+        <h2>Durum kebab</h2>
+        <p>Viande grillée à la broche roulée dans une galette fine.</p>
+        <div class="price-tag">3000 FCFA</div>
+        <button class="add-btn" onclick="addToCart(event, 'Durum kebab', 3000)">Add to Cart</button>
+    </div>
+    <div class="menu-item" onclick="toggleDesc(this)">
+        <img src="https://allarassemjonathan.github.io/durum-kusbasi-real.png">
+        <h2>Durum Kusbasi</h2>
+        <p>Dés d'agneau ou de bœuf marinés, grillés en brochettes.</p>
+        <div class="price-tag">3500 FCFA</div>
+        <button class="add-btn" onclick="addToCart(event, 'Durum Kusbasi', 3500)">Add to Cart</button>
+    </div>
+    <div class="menu-item" onclick="toggleDesc(this)">
+        <img src="https://allarassemjonathan.github.io/durum-tourk-kebab-real.png">
+        <h2>Durum Tourk Kebab</h2>
+        <p>Fines lamelles de viande grillées à la broche (Döner).</p>
+        <div class="price-tag">3000 FCFA</div>
+        <button class="add-btn" onclick="addToCart(event, 'Durum Tourk Kebab', 3000)">Add to Cart</button>
+    </div>
+    <div class="menu-item" onclick="toggleDesc(this)">
+        <img src="https://allarassemjonathan.github.io/durum-viande-real.png">
+        <h2>Durum viande</h2>
+        <p>Portion de viande savoureuse avec crudités fraîches.</p>
+        <div class="price-tag">4000 FCFA</div>
+        <button class="add-btn" onclick="addToCart(event, 'Durum viande', 4000)">Add to Cart</button>
+    </div>
+    <div class="menu-item" onclick="toggleDesc(this)">
+        <img src="https://allarassemjonathan.github.io/yarim-izgara-real.png">
+        <h2>Yarim Izgara</h2>
+        <p>Demi-pain croustillant garni de grillades mixtes.</p>
+        <div class="price-tag">5000 FCFA</div>
+        <button class="add-btn" onclick="addToCart(event, 'Yarim Izgara', 5000)">Add to Cart</button>
+    </div>
+</div>
+
 <div class="menu-section">
     <h1>Boissons</h1>
     <span></span>
 </div>
-
 <div class="menu-container">
-        <div class="menu-item" onclick="toggleDesc(this)">
+    <div class="menu-item" onclick="toggleDesc(this)">
         <img src="https://allarassemjonathan.github.io/ayranrealedited.png">
         <h2>Ayran</h2>
         <p>Boisson traditionnelle nationale de la turquie</p>
         <div class="price-tag">1000 FCFA</div>
-        <button class="add-btn"
-        onclick="addToCart(event, 'Ayran', 1000)">
-        Add to Cart
-        </button>
+        <button class="add-btn" onclick="addToCart(event, 'Ayran', 1000)">Add to Cart</button>
     </div> 
     <div class="menu-item" onclick="toggleDesc(this)">
         <img src="https://allarassemjonathan.github.io/beypazarirealedited.png">
         <h2>Beypazary</h2>
         <p>Eau gazeuse turque naturelle</p>
         <div class="price-tag">1000 FCFA</div>
-        <button class="add-btn"
-        onclick="addToCart(event, 'Beypazary', 1000)">
-        Add to Cart
-        </button>
+        <button class="add-btn" onclick="addToCart(event, 'Beypazary', 1000)">Add to Cart</button>
     </div> 
     <div class="menu-item" onclick="toggleDesc(this)">
         <img src="https://allarassemjonathan.github.io/redbullrealedited.png">
         <h2>Red bull</h2>
         <p>Boisson énergisante gazeuse à la taurine.</p>
         <div class="price-tag">1000 FCFA</div>
-        <button class="add-btn"
-        onclick="addToCart(event, 'Red bull', 1000)">
-        Add to Cart
-        </button>
+        <button class="add-btn" onclick="addToCart(event, 'Red bull', 1000)">Add to Cart</button>
     </div> 
     <div class="menu-item" onclick="toggleDesc(this)">
         <img src="https://allarassemjonathan.github.io/cocacolarealedited.png">
         <h2>Coca cola</h2>
         <p>Soda classique pétillant</p>
         <div class="price-tag">750 FCFA</div>
-        <button class="add-btn"
-        onclick="addToCart(event, 'Coca cola', 750)">
-        Add to Cart
-        </button>
+        <button class="add-btn" onclick="addToCart(event, 'Coca cola', 750)">Add to Cart</button>
     </div> 
     <div class="menu-item" onclick="toggleDesc(this)">
         <img src="https://allarassemjonathan.github.io/cocacolazerorealedited.png">
         <h2>Coca cola zero</h2>
-        <p>Soda classique pétillant</p>
+        <p>Soda sans sucre</p>
         <div class="price-tag">750 FCFA</div>
-        <button class="add-btn"
-        onclick="addToCart(event, 'Coca cola Zero', 750)">
-        Add to Cart
-        </button>
+        <button class="add-btn" onclick="addToCart(event, 'Coca cola Zero', 750)">Add to Cart</button>
     </div> 
     <div class="menu-item" onclick="toggleDesc(this)">
         <img src="https://allarassemjonathan.github.io/fantarealedited.png">
         <h2>Fanta</h2>
-        <p>Soda classique pétillant</p>
+        <p>Soda à l'orange</p>
         <div class="price-tag">750 FCFA</div>
-        <button class="add-btn"
-        onclick="addToCart(event, 'Fanta', 750)">
-        Add to Cart
-        </button>
+        <button class="add-btn" onclick="addToCart(event, 'Fanta', 750)">Add to Cart</button>
     </div> 
     <div class="menu-item" onclick="toggleDesc(this)">
         <img src="https://allarassemjonathan.github.io/spriterealedited.png">
         <h2>Sprite</h2>
+        <p>Soda citron-lime</p>
+        <div class="price-tag">750 FCFA</div>
+        <button class="add-btn" onclick="addToCart(event, 'Sprite', 750)">Add to Cart</button>
+    </div> 
+    <div class="menu-item" onclick="toggleDesc(this)">
+        <img src="https://allarassemjonathan.github.io/spriterealedited.png">
+        <h2>Eau 0.5L</h2>
+        <p>Eau minérale en bouteille 0.5L</p>
+        <div class="price-tag">750 FCFA</div>
+        <button class="add-btn" onclick="addToCart(event, 'Eau 0.5L', 750)">Add to Cart</button>
+    </div> 
+    <div class="menu-item" onclick="toggleDesc(this)">
+        <img src="https://allarassemjonathan.github.io/spriterealedited.png">
+        <h2>Eau 1.5L</h2>
+        <p>Eau minérale en bouteille 1.5L</p>
+        <div class="price-tag">750 FCFA</div>
+        <button class="add-btn" onclick="addToCart(event, 'Eau 1.5L', 750)">Add to Cart</button>
+    </div> 
+    <div class="menu-item" onclick="toggleDesc(this)">
+        <img src="https://allarassemjonathan.github.io/spriterealedited.png">
+        <h2>Seven Up</h2>
         <p>Soda classique pétillant</p>
         <div class="price-tag">750 FCFA</div>
-        <button class="add-btn"
-        onclick="addToCart(event, 'Sprite', 750)">
-        Add to Cart
-        </button>
+        <button class="add-btn" onclick="addToCart(event, 'Seven Up', 750)">Add to Cart</button>
+    </div> 
+    <div class="menu-item" onclick="toggleDesc(this)">
+        <img src="https://allarassemjonathan.github.io/ananaspressearealedited.png">
+        <h2>Pressa Ananas</h2>
+        <p>Jus naturel Ananas</p>
+        <div class="price-tag">750 FCFA</div>
+        <button class="add-btn" onclick="addToCart(event, 'Pressa Ananas', 750)">Add to Cart</button>
+    </div> 
+    <div class="menu-item" onclick="toggleDesc(this)">
+        <img src="https://allarassemjonathan.github.io/goyavepressearealedited.png">
+        <h2>Pressa Goyave</h2>
+        <p>Jus naturel Goyave</p>
+        <div class="price-tag">750 FCFA</div>
+        <button class="add-btn" onclick="addToCart(event, 'Pressa Goyave', 750)">Add to Cart</button>
+    </div> 
+    <div class="menu-item" onclick="toggleDesc(this)">
+        <img src="https://allarassemjonathan.github.io/orangepressearealedited.png">
+        <h2>Pressa Orange</h2>
+        <p>Jus naturel Orange</p>
+        <div class="price-tag">750 FCFA</div>
+        <button class="add-btn" onclick="addToCart(event, 'Pressa Orange', 750)">Add to Cart</button>
     </div> 
 </div>
+
+<div class="cart-btn" onclick="openCheckout()">
+    Cart (<span id="cart-count">0</span>)
+</div>
+
+<div id="checkout-modal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); z-index:3000; overflow-y: auto;">
+    <div style="background:white; max-width:500px; margin:40px auto; padding:30px; border-radius: 8px;">
+        <h2 style="margin-bottom: 20px;">Votre Panier</h2>
+
+        <form action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+            <input type="hidden" name="order" id="order-data">
+
+            <label style="display:block; margin-bottom: 5px;">Nom complet</label>
+            <input type="text" name="name" required style="width:100%;margin-bottom:15px">
+
+            <label style="display:block; margin-bottom: 5px;">Email / Téléphone</label>
+            <input type="text" name="contact" required style="width:100%;margin-bottom:15px">
+
+            <h3 style="margin: 20px 0 10px; border-top: 1px solid #eee; padding-top: 15px;">Résumé de la commande</h3>
+            <div id="order-summary" style="max-height: 200px; overflow-y: auto; margin-bottom: 15px;"></div>
+
+            <button type="submit" style="padding:12px 20px; background:#8b0000; color:white; border:none; cursor:pointer; font-weight:bold; border-radius:4px;">
+                Envoyer la commande
+            </button>
+
+            <button type="button" onclick="closeCheckout()" style="margin-left:10px; padding:12px; background:none; border:1px solid #ccc; cursor:pointer; border-radius:4px;">
+                Fermer
+            </button>
+        </form>
+    </div>
+</div>
+
 <script>
-    // Reveal animation on scroll
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+    // Scroll reveal animation
     const observer = new IntersectionObserver(entries => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
@@ -553,99 +633,89 @@
                 entry.target.style.transform = "translateY(0)";
             }
         });
-    }, { threshold: 0.2 });
+    }, { threshold: 0.1 });
 
     document.querySelectorAll('.menu-item').forEach(item => {
         item.style.opacity = 0;
         item.style.transform = "translateY(20px)";
-        item.style.transition = "all 0.6s ease";
+        item.style.transition = "all 0.5s ease";
         observer.observe(item);
     });
 
-    // Toggle description (only one open at a time)
-  
-        function toggleDesc(element) {
-            const isActive = element.classList.contains('active-desc');
-
-            document.querySelectorAll('.menu-item').forEach(item => {
-                item.classList.remove('active-desc');
-            });
-
-            if (!isActive) {
-                element.classList.add('active-desc');
-                element.scrollIntoView({ behavior: "smooth", block: "center" });
-            }
+    function toggleDesc(element) {
+        const isActive = element.classList.contains('active-desc');
+        document.querySelectorAll('.menu-item').forEach(item => item.classList.remove('active-desc'));
+        if (!isActive) {
+            element.classList.add('active-desc');
         }
-        let cart = JSON.parse(localStorage.getItem("cart")) || [];
+    }
 
-        function addToCart(e, name, price) {
-            e.stopPropagation();
-
-            cart.push({ name, price });
-            localStorage.setItem("cart", JSON.stringify(cart));
-            updateCartCount();
-        }
-
-        function updateCartCount() {
-            document.getElementById("cart-count").innerText = cart.length;
-        }
-
-        function openCheckout() {
-            const modal = document.getElementById("checkout-modal");
-            const summary = document.getElementById("order-summary");
-
-            let total = 0;
-            summary.innerHTML = "";
-
-            cart.forEach(item => {
-                total += item.price;
-                summary.innerHTML += `<p>${item.name} - ${item.price} FCFA</p>`;
-            });
-
-            summary.innerHTML += `<hr><strong>Total: ${total} FCFA</strong>`;
-
-            document.getElementById("order-data").value =
-                cart.map(i => `${i.name} (${i.price} FCFA)`).join(", ") +
-                ` | Total: ${total} FCFA`;
-
-            modal.style.display = "block";
-        }
-
-        function closeCheckout() {
-            document.getElementById("checkout-modal").style.display = "none";
-        }
-
+    function addToCart(e, name, price) {
+        e.stopPropagation();
+        cart.push({ name, price });
+        localStorage.setItem("cart", JSON.stringify(cart));
         updateCartCount();
+
+        // Animation
+        const cartBtn = document.querySelector('.cart-btn');
+        cartBtn.classList.remove('cart-pop-animation');
+        void cartBtn.offsetWidth; 
+        cartBtn.classList.add('cart-pop-animation');
+
+        showToast(`${name} ajouté au panier !`);
+    }
+
+    function updateCartCount() {
+        document.getElementById("cart-count").innerText = cart.length;
+    }
+
+    function showToast(message) {
+        const toast = document.createElement('div');
+        toast.className = 'toast-notification';
+        toast.innerText = message;
+        document.body.appendChild(toast);
+        setTimeout(() => toast.classList.add('toast-show'), 100);
+        setTimeout(() => {
+            toast.classList.remove('toast-show');
+            setTimeout(() => toast.remove(), 300);
+        }, 2500);
+    }
+
+    function openCheckout() {
+        const modal = document.getElementById("checkout-modal");
+        const summary = document.getElementById("order-summary");
+        let total = 0;
+        summary.innerHTML = "";
+
+        if(cart.length === 0) {
+            summary.innerHTML = "<p>Votre panier est vide.</p>";
+        } else {
+            cart.forEach((item, index) => {
+                total += item.price;
+                summary.innerHTML += `<div style="display:flex; justify-content:space-between; margin-bottom:5px;">
+                    <span>${item.name}</span>
+                    <span>${item.price} FCFA</span>
+                </div>`;
+            });
+            summary.innerHTML += `<div style="border-top:2px solid #333; margin-top:10px; padding-top:10px; font-weight:bold; display:flex; justify-content:space-between;">
+                <span>Total</span>
+                <span>${total} FCFA</span>
+            </div>`;
+        }
+
+        document.getElementById("order-data").value = 
+            cart.map(i => `${i.name} (${i.price} FCFA)`).join(", ") + ` | Total: ${total} FCFA`;
+
+        modal.style.display = "block";
+    }
+
+    function closeCheckout() {
+        document.getElementById("checkout-modal").style.display = "none";
+    }
+
+    // Initial count update
+    updateCartCount();
 </script>
-<div class="cart-btn" onclick="openCheckout()">
-    Cart (<span id="cart-count">0</span>)
-</div>
-<div id="checkout-modal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); z-index:3000;">
-    <div style="background:white; max-width:500px; margin:80px auto; padding:30px;">
-        <h2>Checkout</h2>
-
-        <form action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
-            <input type="hidden" name="order" id="order-data">
-
-            <label>Name</label>
-            <input type="text" name="name" required style="width:100%;margin-bottom:10px">
-
-            <label>Email</label>
-            <input type="email" name="email" required style="width:100%;margin-bottom:10px">
-
-            <h3>Order Summary</h3>
-            <div id="order-summary"></div>
-
-            <button type="submit" style="margin-top:15px;padding:10px 16px;background:#8b0000;color:white;border:none;">
-                Send Order
-            </button>
-
-            <button type="button" onclick="closeCheckout()" style="margin-left:10px">
-                Cancel
-            </button>
-        </form>
-    </div>
-</div>
 
 </body>
 </html>
