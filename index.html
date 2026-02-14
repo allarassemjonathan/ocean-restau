@@ -223,6 +223,126 @@
         transform: translateY(0);
     }
 
+/* ================= MODAL STYLES ================= */
+    .modal-overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(11, 60, 138, 0.85); /* Blue-tinted overlay */
+        backdrop-filter: blur(4px);
+        z-index: 3000;
+        overflow-y: auto;
+    }
+
+    .modal-content {
+        background: white;
+        max-width: 500px;
+        margin: 40px auto;
+        padding: 0;
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+        border-top: 6px solid var(--red-main);
+    }
+
+    .modal-header {
+        background: var(--blue-light);
+        padding: 20px 30px;
+        color: var(--blue-main);
+        border-bottom: 1px solid var(--border-light);
+    }
+
+    .modal-body {
+        padding: 30px;
+    }
+
+    .modal-body label {
+        display: block;
+        font-weight: 700;
+        margin-bottom: 8px;
+        color: var(--blue-main);
+        font-size: 0.9rem;
+    }
+
+    .modal-body input {
+        width: 100%;
+        padding: 12px;
+        margin-bottom: 20px;
+        border: 2px solid var(--border-light);
+        border-radius: 8px;
+        font-size: 1rem;
+        transition: border-color 0.3s;
+    }
+
+    .modal-body input:focus {
+        outline: none;
+        border-color: var(--blue-main);
+    }
+
+    .summary-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 8px 0;
+        border-bottom: 1px dashed var(--border-light);
+    }
+
+    .remove-item-btn {
+        color: var(--red-main);
+        background: none;
+        border: none;
+        cursor: pointer;
+        font-weight: bold;
+        padding: 5px;
+        font-size: 1.2rem;
+    }
+
+    .modal-footer {
+        padding: 20px 30px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        background: #fdfdfd;
+    }
+
+    .btn-group {
+        display: flex;
+        gap: 10px;
+    }
+
+    .submit-btn {
+        width: 100%;
+        padding: 16px;
+        background: var(--blue-main);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-weight: 800;
+        text-transform: uppercase;
+        cursor: pointer;
+        transition: background 0.3s;
+    }
+
+    .submit-btn:hover {
+        background: #153f7a;
+    }
+
+    .secondary-btn {
+        flex: 1;
+        padding: 10px;
+        background: white;
+        border: 1px solid var(--border-light);
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 600;
+        color: var(--text-muted);
+    }
+
+    .empty-btn {
+        color: var(--red-main);
+        border-color: var(--red-main);
+    }
+
     /* ================= RESPONSIVE ================= */
     @media (max-width: 900px) {
         .menu-container {
@@ -602,36 +722,39 @@
 <div class="cart-btn" onclick="openCheckout()">
     Cart (<span id="cart-count">0</span>)
 </div>
+<div id="checkout-modal" class="modal-overlay">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>Votre Panier</h2>
+        </div>
 
-<div id="checkout-modal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); z-index:3000; overflow-y: auto;">
-    <div style="background:white; max-width:500px; margin:40px auto; padding:30px; border-radius: 8px;">
-        <h2 style="margin-bottom: 20px;">Votre Panier</h2>
+        <form action="https://formspree.io/f/maqdypbq" method="POST" onsubmit="clearCartAfterSubmit()">
+            <div class="modal-body">
+                <input type="hidden" name="order" id="order-data">
 
-        <form action="https://formspree.io/f/maqdypbq" method="POST">
-            <input type="hidden" name="order" id="order-data">
+                <label>Nom complet</label>
+                <input type="text" name="name" placeholder="Ex: Jean Dupont" required>
 
-            <label style="display:block; margin-bottom: 5px;">Nom complet</label>
-            <input type="text" name="name" required style="width:100%;margin-bottom:15px">
+                <label>Email / Téléphone</label>
+                <input type="text" name="contact" placeholder="Ex: +235 ..." required>
 
-            <label style="display:block; margin-bottom: 5px;">Email / Téléphone</label>
-            <input type="text" name="contact" required style="width:100%;margin-bottom:15px">
+                <h3 style="margin: 10px 0; color: var(--blue-main); font-size: 1.1rem;">Résumé</h3>
+                <div id="order-summary"></div>
+            </div>
 
-            <h3 style="margin: 20px 0 10px; border-top: 1px solid #eee; padding-top: 15px;">Résumé de la commande</h3>
-            <div id="order-summary" style="max-height: 200px; overflow-y: auto; margin-bottom: 15px;"></div>
-
-            <button type="submit" style="padding:12px 20px; background:#8b0000; color:white; border:none; cursor:pointer; font-weight:bold; border-radius:4px;">
-                Envoyer la commande
-            </button>
-
-            <button type="button" onclick="closeCheckout()" style="margin-left:10px; padding:12px; background:none; border:1px solid #ccc; cursor:pointer; border-radius:4px;">
-                Fermer
-            </button>
+            <div class="modal-footer">
+                <button type="submit" class="submit-btn">Envoyer la commande</button>
+                <div class="btn-group">
+                    <button type="button" class="secondary-btn empty-btn" onclick="emptyCartManually()">Vider</button>
+                    <button type="button" class="secondary-btn" onclick="closeCheckout()">Fermer</button>
+                </div>
+            </div>
         </form>
     </div>
 </div>
 
 <script>
-    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+   let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
     // Scroll reveal animation
     const observer = new IntersectionObserver(entries => {
@@ -653,9 +776,7 @@
     function toggleDesc(element) {
         const isActive = element.classList.contains('active-desc');
         document.querySelectorAll('.menu-item').forEach(item => item.classList.remove('active-desc'));
-        if (!isActive) {
-            element.classList.add('active-desc');
-        }
+        if (!isActive) element.classList.add('active-desc');
     }
 
     function addToCart(e, name, price) {
@@ -663,14 +784,14 @@
         cart.push({ name, price });
         localStorage.setItem("cart", JSON.stringify(cart));
         updateCartCount();
+        showToast(`${name} ajouté !`);
+    }
 
-        // Animation
-        const cartBtn = document.querySelector('.cart-btn');
-        cartBtn.classList.remove('cart-pop-animation');
-        void cartBtn.offsetWidth; 
-        cartBtn.classList.add('cart-pop-animation');
-
-        showToast(`${name} ajouté au panier !`);
+    function removeFromCart(index) {
+        cart.splice(index, 1);
+        localStorage.setItem("cart", JSON.stringify(cart));
+        updateCartCount();
+        openCheckout(); // Refresh modal view
     }
 
     function updateCartCount() {
@@ -696,23 +817,28 @@
         summary.innerHTML = "";
 
         if(cart.length === 0) {
-            summary.innerHTML = "<p>Votre panier est vide.</p>";
+            summary.innerHTML = "<p style='color:var(--text-muted); text-align:center; padding:20px;'>Votre panier est vide.</p>";
         } else {
             cart.forEach((item, index) => {
                 total += item.price;
-                summary.innerHTML += `<div style="display:flex; justify-content:space-between; margin-bottom:5px;">
-                    <span>${item.name}</span>
-                    <span>${item.price} FCFA</span>
-                </div>`;
+                summary.innerHTML += `
+                    <div class="summary-item">
+                        <div>
+                            <button type="button" class="remove-item-btn" onclick="removeFromCart(${index})">×</button>
+                            <span style="font-weight:600;">${item.name}</span>
+                        </div>
+                        <span style="color:var(--red-main); font-weight:700;">${item.price} FCFA</span>
+                    </div>`;
             });
-            summary.innerHTML += `<div style="border-top:2px solid #333; margin-top:10px; padding-top:10px; font-weight:bold; display:flex; justify-content:space-between;">
-                <span>Total</span>
-                <span>${total} FCFA</span>
-            </div>`;
+            summary.innerHTML += `
+                <div style="margin-top:15px; padding-top:10px; border-top:2px solid var(--blue-main); font-weight:800; display:flex; justify-content:space-between; font-size:1.2rem; color:var(--blue-main);">
+                    <span>Total</span>
+                    <span>${total} FCFA</span>
+                </div>`;
         }
 
         document.getElementById("order-data").value = 
-            cart.map(i => `${i.name} (${i.price} FCFA)`).join(", ") + ` | Total: ${total} FCFA`;
+            cart.map(i => `${i.name} (${i.price} FCFA)`).join(", ") + ` | TOTAL: ${total} FCFA`;
 
         modal.style.display = "block";
     }
@@ -720,8 +846,27 @@
     function closeCheckout() {
         document.getElementById("checkout-modal").style.display = "none";
     }
+    
+    function emptyCartManually() {
+        if (cart.length === 0) return;
+        if (confirm("Voulez-vous vraiment vider tout le panier ?")) {
+            cart = [];
+            localStorage.removeItem("cart");
+            updateCartCount();
+            openCheckout();
+            showToast("Panier vidé.");
+        }
+    }
 
-    // Initial count update
+    function clearCartAfterSubmit() {
+        // We set a small delay so Formspree can capture the current state before we wipe it
+        setTimeout(() => {
+            cart = [];
+            localStorage.removeItem("cart");
+            emptyCartManually();
+        }, 500);
+    }
+
     updateCartCount();
 </script>
 
