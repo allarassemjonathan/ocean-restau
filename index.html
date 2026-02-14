@@ -29,6 +29,44 @@
         overflow-x: hidden;
     }
 
+    /* ================= HERO / CTA SECTION ================= */
+    .cta-section {
+        background: linear-gradient(135deg, var(--blue-main), #102a5c);
+        color: white;
+        text-align: center;
+        padding: 80px 20px 70px;
+    }
+
+    .cta-section h1 {
+        font-size: 3rem;
+        font-weight: 900;
+        letter-spacing: 2px;
+        margin-bottom: 15px;
+    }
+
+    .cta-section p {
+        font-size: 1.2rem;
+        opacity: 0.9;
+        margin-bottom: 30px;
+    }
+
+    .cta-btn {
+        background: linear-gradient(90deg, var(--red-main), var(--red-hover));
+        border: none;
+        padding: 16px 40px;
+        border-radius: 40px;
+        font-size: 1.1rem;
+        font-weight: 800;
+        color: white;
+        cursor: pointer;
+        transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .cta-btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+    }
+
     /* ================= NAVBAR ================= */
     .navbar {
         background: linear-gradient(90deg, var(--blue-main), #102a5c);
@@ -343,6 +381,27 @@
         border-color: var(--red-main);
     }
 
+    .localisation-section {
+        background: white;
+        max-width: 1100px;
+        margin: 40px auto;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        text-align: center;
+    }
+
+    .localisation-section h2 {
+        margin-bottom: 20px;
+    }
+
+    .map-container {
+        width: 100%;
+        overflow: hidden;
+        border-radius: 8px;
+    }
+
+
     /* ================= RESPONSIVE ================= */
     @media (max-width: 900px) {
         .menu-container {
@@ -363,20 +422,27 @@
 </head>
 
 <body>
-
 <header class="navbar">
     <div class="navbar-container">
         <div class="navbar-logo">
             <img src="https://allarassemjonathan.github.io/oceanlogo.png" alt="Ocean Logo">
         </div>
         <nav class="navbar-links">
-            <a href="#" class="active">MENU</a>
+            <a href="#menu" class="active">MENU</a>
             <a href="#localisation">LOCALISATION</a>
         </nav>
     </div>
 </header>
+<section class="cta-section">
+    <h1>COMMANDEZ MAINTENANT !</h1>
+    <p>Découvrez nos spécialités turques fraîches et savoureuses.</p>
 
-<div class="menu-section">
+    <a href="#menu">
+        <button class="cta-btn">Voir le Menu</button>
+    </a>
+</section>
+
+<div id="menu" class="menu-section">
     <h1>Nourriture</h1>
     <span></span>
 </div>
@@ -719,6 +785,22 @@
     </div> 
 </div>
 
+<div id="localisation" class="localisation-section">
+    <h2> Localisation</h2>
+
+    <div class="map-container">
+        <iframe 
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3492.046567204637!2d-17.17016942489147!3d14.721801885779001!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xec19900786d8f6d%3A0xbcdedc0e070e3c0d!2sCit%C3%A9%20des%20fonctionnaires!5e1!3m2!1sen!2sus!4v1771088397077!5m2!1sen!2sus"
+            width="100%" 
+            height="400"
+            style="border:0;"
+            allowfullscreen=""
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade">
+        </iframe>
+    </div>
+</div>
+
 <div class="cart-btn" onclick="openCheckout()">
     Cart (<span id="cart-count">0</span>)
 </div>
@@ -867,6 +949,34 @@
         }, 500);
     }
 
+    const navLinks = document.querySelectorAll(".navbar-links a");
+
+    navLinks.forEach(link => {
+        link.addEventListener("click", function () {
+            navLinks.forEach(l => l.classList.remove("active"));
+            this.classList.add("active");
+        });
+    });
+
+    const sections = document.querySelectorAll("div[id]");
+
+    window.addEventListener("scroll", () => {
+        let current = "";
+
+        sections.forEach(section => {
+            const sectionTop = section.offsetTop - 120;
+            if (scrollY >= sectionTop) {
+                current = section.getAttribute("id");
+            }
+        });
+
+        navLinks.forEach(link => {
+            link.classList.remove("active");
+            if (link.getAttribute("href") === "#" + current) {
+                link.classList.add("active");
+            }
+        });
+    });
     updateCartCount();
 </script>
 
