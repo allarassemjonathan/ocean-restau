@@ -30,12 +30,12 @@
     }
 
     /* ================= HERO / CTA SECTION ================= */
-    .cta-section {
+    /* .cta-section {
         background: linear-gradient(135deg, var(--blue-main), #102a5c);
         color: white;
         text-align: center;
         padding: 80px 20px 70px;
-    }
+    } */
 
     .cta-section h1 {
         font-size: 3rem;
@@ -401,6 +401,98 @@
         border-radius: 8px;
     }
 
+    .cta-section {
+        
+        position: relative; 
+        /* 1. Sets the 'anchor' point. Any child with 'absolute' positioning 
+            will now stay inside this box instead of floating away. */
+
+        width: 100%; 
+        /* 2. Ensures the section spans the full width of the screen. */
+
+        height: 100vh; 
+        /* 3. This is vital. 'vh' stands for 'viewport height'. This forces the 
+            container to be exactly as tall as the browser window. Without 
+            this, the box collapses to 0px, causing the 'vanishing' look. */
+
+        overflow: hidden; 
+        /* 4. The 'safety clip'. If the background video is larger than the 
+            screen, this chops off the extra edges so no scrollbars appear. */
+
+        display: flex;
+        /* 5. Activates Flexbox. This makes the container 'smart' so it can 
+            perfectly align its children (the text and buttons). */
+        
+        align-items: center; 
+        /* 7. Centers the items horizontally (Left to Right). */
+
+        justify-content: center; 
+        /* 8. Centers the items vertically (Top to Bottom). */
+    }
+
+.bg-video {
+   
+    position: absolute;
+    /* 1. Lifts the video off the 'ground' so text can sit on top of it. */
+
+    top:50%; left:50%;
+    transform:translate(-50%, -50%);
+    /* 2. The 'Magic Formula'. This pins the dead-center of the video 
+    to the dead-center of the container. */
+
+    min-width: 100%; min-height: 100%;
+    /* 3. Guarantees the video is always at least as big as the screen. */
+
+    object-fit: cover; 
+    /* 4. Prevents stretching. It crops the edges of the video to fill 
+          the space perfectly, like a phone wallpaper. */
+
+    z-index: -1; 
+    /* 5. Pushes the video to the very back of the stack. */
+
+}
+
+/* Optional: Add a dark overlay so text is easier to read */
+.cta-section::before {
+   content: ""; 
+    /* 1. The 'Birth Certificate'. This line is required for the 
+          element to actually show up on the screen. */
+
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    /* 2. Stretches this dark layer to cover the entire container perfectly. */
+
+    background: rgba(0, 0, 0, 0.6); 
+    /* 3. Black color at 60% transparency. */
+
+    z-index: 0; 
+    /* 4. Sits at 'Ground Level'. This is higher than the video (-1) 
+          but lower than the text (1). */
+}
+
+.cta-content {
+    position: relative; 
+    /* 1. By giving it a position, we unlock the ability to use z-index. */
+
+    z-index: 1; 
+    /* 2. This is the 'Front Row' seat. It ensures the text sits 
+          on top of the dark veil and the video. */
+
+    color: white;
+    text-align: center;
+
+}
+
+.cta-btn {
+    padding: 12px 24px;
+    font-size: 1.2rem;
+    background-color: #ff4500; /* Example Turkish red/orange */
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-top: 20px;
+}
 
     /* ================= RESPONSIVE ================= */
     @media (max-width: 900px) {
@@ -433,13 +525,20 @@
         </nav>
     </div>
 </header>
-<section class="cta-section">
-    <h1>COMMANDEZ MAINTENANT !</h1>
-    <p>Découvrez nos spécialités turques fraîches et savoureuses.</p>
 
-    <a href="#menu">
-        <button class="cta-btn">Voir le Menu</button>
-    </a>
+<section class="cta-section">
+    <video autoplay muted loop playsinline class="bg-video">
+        <source src="https://allarassemjonathan.github.io/vid_prod.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+
+    <div class="cta-content">
+        <h1>COMMANDEZ MAINTENANT!</h1>
+        <p>Découvrez nos spécialités turques fraîches et savoureuses.</p>
+        <a href="#menu">
+            <button class="cta-btn">Voir le Menu</button>
+        </a>
+    </div>
 </section>
 
 <div id="menu" class="menu-section">
